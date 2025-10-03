@@ -1,10 +1,11 @@
 "use server";
 import DashboardLayout from "@/components/organisms/DashboardLayout";
+import QueueStatus from "@/components/organisms/QueueStatus";
 
-export default async function QueueStatusPage() {
+export default async function Page() {
   return (
     <DashboardLayout>
-      <div className="max-w-2xl mx-auto">"Queue Status Page"</div>
+      <QueueStatus />
     </DashboardLayout>
   );
 }

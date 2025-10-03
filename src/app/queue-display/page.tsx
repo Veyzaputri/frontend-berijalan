@@ -1,6 +1,9 @@
 "use server";
 import DashboardLayout from "@/components/organisms/DashboardLayout";
+import QueueDisplayPage from "@/components/organisms/QueueDisplayPage";
 
-export default async function QueueDisplayPage() {
-  return <DashboardLayout>"Queue Display Page"</DashboardLayout>;
+export default async function QueueDisplayPages() {
+  return <DashboardLayout>
+<QueueDisplayPage />
+  </DashboardLayout>;
 }
