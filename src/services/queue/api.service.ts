@@ -14,6 +14,7 @@ import {
     IResetQueueResponse,
     ISkipQueueRequest,
     ISkipQueueResponse,
+    ActiveCounter,
     
 } from '@/interfaces/service/queue.interface'
 import { errorMessage } from '@/utils/error.util'
@@ -48,14 +49,20 @@ export const apiReleaseQueue = async (data: IReleaseQueueRequest) => {
     }
 }
 
-export const apiGetCurrentQueues = async () => {
-    try {
-        const res = await satellite.get<APIBaseResponse<ICurrentQueuesResponse>>(`${API_BASE_PATH}/current`)
-        return res.data
-    } catch (error) {
-        return errorMessage<ICurrentQueuesResponse>(error)
-    }
-}
+
+export const apiGetCurrentQueues = async (): Promise<APIBaseResponse<ActiveCounter[]>> => {
+  try {
+    const res = await satellite.get(`/api/v1/queues/current`);
+    return res.data; // ✅ return full API response object
+  } catch (error) {
+    console.error("Error fetching current queues:", error);
+    return {
+      status: false,
+      message: "Gagal mengambil data antrian",
+      data: [],
+    };
+  }
+};
 
 export const apiGetQueues = async () => {
   try {
@@ -111,3 +118,16 @@ export const apiResetQueue = async (data: IResetQueueRequest) => {
         return errorMessage<IResetQueueResponse>(error)
     }
 }
+
+export interface IServeQueueRequest {
+  id: number; // id queue
+}
+
+export const apiServeQueue = async (data: IServeQueueRequest) => {
+  try {
+    const res = await satellite.post<APIBaseResponse<IQueue>>(`${API_BASE_PATH}/serve`, data);
+    return res.data;
+  } catch (error) {
+    return errorMessage<IQueue>(error);
+  }
+};
