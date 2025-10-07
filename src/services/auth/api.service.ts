@@ -114,14 +114,22 @@ export const apiDeleteAdmin = async (id: number) => {
   }
 };
 
-export const apiToggleAdminStatus = async (data: IToggleAdminStatusRequest) => {
+export const apiToggleAdminStatus = async (
+  data: IToggleAdminStatusRequest
+): Promise<APIBaseResponse<IToggleAdminStatusResponse>> => {
   try {
-    const res = await satellite.patch<
-      APIBaseResponse<IToggleAdminStatusResponse>
-    >(`${API_BASE_PATH}/${data.id}/toggle-status`);
+    const res = await satellite.patch<APIBaseResponse<IToggleAdminStatusResponse>>(
+      `${API_BASE_PATH}/${data.id}/toggle-status`
+    );
     return res.data;
   } catch (error) {
-    return errorMessage(error);
+    // Jangan panggil errorMessage di luar
+    return {
+      status: false,
+      message: error instanceof Error ? error.message : "Unexpected error",
+      data: { admin: {} as IAdmin, newStatus: false },
+    };
   }
 };
+
 
