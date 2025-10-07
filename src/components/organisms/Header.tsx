@@ -1,20 +1,37 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/utils/classname.util'
 
 export default function Header() {
   const pathname = usePathname()
+  const router = useRouter()
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  useEffect(() =>{
+    const token = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('token='))
+    ?.split('=')[1]
+    setIsLoggedIn(!!token)
+  }, [])
 
   const isActive = (path: string) => {
     return pathname === path
   }
 
+  const handleLogout = () => {
+    // Hapus token dari cookie
+    document.cookie = 'token=; path=/; max-age=0'
+    setIsLoggedIn(false)
+    router.push('/login') // redirect ke login
+  }
+
   const navItems = [
     { name: 'Dashboard', path: '/' },
     { name: 'Admin Management', path: '/admin' },
-    { name: 'Login', path: '/login' },
+    ...(!isLoggedIn ? [{ name: 'Login', path: '/login' }] : [])
   ]
 
   return (
@@ -39,6 +56,17 @@ export default function Header() {
                 {item.name}
               </Link>
             ))}
+            {!isLoggedIn ? (
+              <Link
+              href="/login"
+              className="px-3 py2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100">Login</Link>
+            ) : (
+              <button
+              onClick={handleLogout}
+              className="px-3 py2 rounded-md text-sm font-medium text-red-600 hover:bg-red-100">Logout</button>
+            )
+
+            }
           </nav>
         </div>
       </div>
