@@ -1,10 +1,9 @@
 "use server";
 import DashboardLayout from "@/components/organisms/DashboardLayout";
+import OperatorCounterPage from "@/components/organisms/OperatorCounterPage";
 
-export default async function CounterOperatorPage() {
-  return (
-    <DashboardLayout>
-      <div className="max-w-3xl mx-auto">"Counter Operator Page"</div>
-    </DashboardLayout>
-  );
+export default async function OperatorCounterPages() {
+  return <DashboardLayout>
+<OperatorCounterPage />
+  </DashboardLayout>;
 }
