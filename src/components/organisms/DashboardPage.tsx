@@ -1,8 +1,53 @@
+"use client"
+
 import Link from "next/link";
 import React from "react";
 import Card from "../atoms/Card";
 
+import { useEffect, useState } from "react";
+import { apiGetMetrics, apiGetCurrentQueues } from "@/services/queue/api.service";
+import { IGetQueueMetricsResponse } from "@/interfaces/service/queue.interface";
+import { ActiveCounter } from "@/interfaces/service/queue.interface";
+
+
 const DashboardPage = () => {
+    const [counters, setCounters] = useState<ActiveCounter[]>([]);
+  const [metrics, setMetrics] = useState<IGetQueueMetricsResponse>({
+    waiting: 0,
+    called: 0,
+    released: 0,
+    skipped: 0,
+    served: 0,
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // Ambil counters & queues aktif
+      const queueRes = await apiGetCurrentQueues();
+      if (queueRes.status && queueRes.data) {
+        setCounters(queueRes.data);
+
+        // Hitung metrics
+        const calculatedMetrics = queueRes.data.reduce(
+          (acc, counter) => {
+            counter.queues.forEach(q => {
+              if (q.status === "CLAIMED") acc.waiting += 1;
+              if (q.status === "CALLED") acc.called += 1;
+              if (q.status === "SERVED") acc.served += 1;
+              if (q.status === "SKIPPED") acc.skipped += 1;
+              if (q.status === "RELEASED") acc.released += 1;
+            });
+            return acc;
+          },
+          { waiting: 0, called: 0, released: 0, skipped: 0, served: 0 }
+        );
+
+        setMetrics(calculatedMetrics);
+      }
+    };
+
+    fetchData();
+  }, []);
     const quickLinks = [{
         title: "Ambil Nomor Antrian",
         description: "Ambil nomor antrian untuk dilayani",
@@ -29,11 +74,13 @@ const DashboardPage = () => {
     {
         title: "Operator Counter",
         description: "Panel untuk operator counter",
-        href: "/counter-operator",
+        href: "/operator-counter",
         icon: "person",
         color: "bg-amber-500",
     },
+    
 ];
+
 
 return (
     <div className="space-y-8">
@@ -55,7 +102,7 @@ return (
                     <div className="flex justify-between items-start">
                         <div>
                             <p className="text-yellow-800 text-sm font-medium"> Menunggu</p>
-                            <h3 className="text-3xl font-bold text-yellow-900 mt-1">1</h3>
+                            <h3 className="text-3xl font-bold text-yellow-900 mt-1">{metrics.waiting}</h3>
                         </div>
                         <span className="material-symbols-outlined text-yellow-500 text-3xl">
                             timer
@@ -67,7 +114,7 @@ return (
                     <div className="flex justify-between items-start">
                         <div>
                             <p className="text-green-800 text-sm font-medium"> Selesai</p>
-                            <h3 className="text-3xl font-bold text-green-900 mt-1">5</h3>
+                            <h3 className="text-3xl font-bold text-green-900 mt-1">{metrics.served}</h3>
                         </div>
                         <span className="material-symbols-outlined text-green-500 text-3xl">
                             task_alt
@@ -79,7 +126,7 @@ return (
                     <div className="flex justify-between items-start">
                         <div>
                             <p className="text-red-800 text-sm font-medium"> Dilewati</p>
-                            <h3 className="text-3xl font-bold text-red-900 mt-1">4</h3>
+                            <h3 className="text-3xl font-bold text-red-900 mt-1">{metrics.skipped}</h3>
                         </div>
                         <span className="material-symbols-outlined text-red-500 text-3xl">
                             skip_next
