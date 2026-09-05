@@ -3,11 +3,6 @@ export type EQueueStatus =
 | "CLAIMED"
 | "CALLED"
 | "SERVED"
-| "SKIPPED"import { create } from 'zustand';
-export type EQueueStatus =
-| "CLAIMED"
-| "CALLED"
-| "SERVED"
 | "SKIPPED"
 | "RELEASED"
 | "RESET";
