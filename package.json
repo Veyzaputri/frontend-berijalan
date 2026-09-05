@@ -19,7 +19,7 @@
     "dayjs": "^1.11.18",
     "lodash": "^4.17.21",
     "material-symbols": "^0.35.2",
-    "next": "15.5.3",
+    "next": "15.5.25",
     "nextjs-toploader": "^3.9.17",
     "nprogress": "^0.2.0",
     "react": "19.1.0",
@@ -40,7 +40,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "15.5.3",
+    "eslint-config-next": "15.5.25",
     "prettier": "^3.6.2",
     "tailwindcss": "^4",
     "typescript": "5.9.2"
