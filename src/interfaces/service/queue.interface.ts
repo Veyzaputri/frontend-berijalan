@@ -1,83 +1,87 @@
-import { create } from 'zustand';
 export type EQueueStatus =
-| "CLAIMED"
-| "CALLED"
-| "SERVED"
-| "SKIPPED"
-| "RELEASED"
-| "RESET";
+  | "CLAIMED"
+  | "CALLED"
+  | "SERVED"
+  | "SKIPPED"
+  | "RELEASED"
+  | "RESET";
 
 export interface ICurrentQueuesResponse {
-    id: number
-    number: number
-    isActive: boolean
-    name: string
-    currentQueue: number
-    maxQueue?: number
-    status: EQueueStatus
-    counterId: number;
-    counter?: {
-        id: number;
-        name: string;
-    } | null; 
+  id: number;
+  number: number;
+  isActive: boolean;
+  name: string;
+  currentQueue: number;
+  maxQueue?: number;
+  status: EQueueStatus;
+  counterId: number;
+  counter?: {
+    id: number;
+    name: string;
+  } | null;
 }
 
 export interface IQueue {
-    id: number
-    queueNumber: number
-    status: EQueueStatus
-    counter?: {
-        id: number
-        name: string
-    } | null
-    createdAt: string
-    updatedAt: string
+  id: number;
+  queueNumber: number;
+  status: EQueueStatus;
+  counter?: {
+    id: number;
+    name: string;
+  } | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface IClaimQueueResponse {
-    queueNumber: number
-    counterName: string
-    counterId: number
-    estimatedWaitTime: number
-    positionQueue: number
+  queueNumber: number;
+  counterName: string;
+  counterId: number;
+  estimatedWaitTime: number;
+  positionQueue: number;
 }
+
 export interface IGetQueueMetricsResponse {
-    waiting: number
-    called: number
-    released: number
-    skipped: number
-    served: number
+  waiting: number;
+  called: number;
+  released: number;
+  skipped: number;
+  served: number;
 }
 
 export interface IReleaseQueueRequest {
-    queueNumber: number
-    counterId: number
+  queueNumber: number;
+  counterId: number;
 }
 
 export interface IReleaseQueueResponse {
-  success: boolean
+  success: boolean;
 }
-
 
 export interface INextQueueRequest {
-    counter_id: number
+  counter_id: number;
 }
+
 export interface INextQueueResponse {
-    queue: IQueue
-    previousQueue?: IQueue | null
+  queue: IQueue;
+  previousQueue?: IQueue | null;
 }
+
 export interface ISkipQueueRequest {
-    counter_id: number
+  counter_id: number;
 }
+
 export interface ISkipQueueResponse {
-    skippedQueue: IQueue
-    nextQueue?: IQueue | null
+  skippedQueue: IQueue;
+  nextQueue?: IQueue | null;
 }
+
 export interface IResetQueueRequest {
-    counter_id: number
+  counter_id: number;
 }
+
 export interface IResetQueueResponse {
-    affectedQueues: number
+  affectedQueues: number;
 }
 
 export interface ActiveQueue {
@@ -93,72 +97,4 @@ export interface ActiveCounter {
   isActive: boolean;
   maxQueue: number | null;
   queues: ActiveQueue[];
-}
-| "RELEASED"
-| "RESET";
-
-export interface ICurrentQueuesResponse {
-    id: number
-    isActive: boolean
-    name: string
-    currentQueue: number
-    maxQueue?: number
-    status: EQueueStatus 
-}
-
-export interface IQueue {
-    id: number
-    queueNumber: number
-    status: EQueueStatus
-    counter?: {
-        id: number
-        name: string
-    } | null
-    createdAt: string
-    updatedAt: string
-}
-
-export interface IClaimQueueResponse {
-    queueNumber: number
-    counterName: string
-    counterId: number
-    estimatedWaitTime: number
-    positionQueue: number
-}
-export interface IGetQueueMetricsResponse {
-    waiting: number
-    called: number
-    released: number
-    skipped: number
-}
-
-export interface IReleaseQueueRequest {
-    queueNumber: number
-    counterId: number
-}
-
-export interface IReleaseQueueResponse {
-  success: boolean
-}
-
-
-export interface INextQueueRequest {
-    counter_id: number
-}
-export interface INextQueueResponse {
-    queue: IQueue
-    previousQueue?: IQueue | null
-}
-export interface ISkipQueueRequest {
-    counter_id: number
-}
-export interface ISkipQueueResponse {
-    skippedQueue: IQueue
-    nextQueue?: IQueue | null
-}
-export interface IResetQueueRequest {
-    counter_id: number
-}
-export interface IResetQueueResponse {
-    affectedQueues: number
 }
